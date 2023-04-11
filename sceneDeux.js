@@ -1,4 +1,5 @@
 import eventsCenter from "./EventsCenter.js"
+import { deplacement } from "./script.js";
 
 export class sceneDeux extends Phaser.Scene {
             constructor() {

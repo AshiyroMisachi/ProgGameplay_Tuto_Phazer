@@ -6,10 +6,6 @@ export class SceneUn extends Phaser.Scene {
         super("sceneUn");
     }
 
-    init(data) {
-
-    }
-
     preload() {
         this.load.image('skyred', 'assets/skyred.jfif');
         this.load.image('ground', 'assets/platform.png');

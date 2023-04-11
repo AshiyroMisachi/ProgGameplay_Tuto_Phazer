@@ -1,4 +1,5 @@
 import eventsCenter from "./EventsCenter.js"
+import { deplacement } from "./script.js";
 
 export class SceneUn extends Phaser.Scene {
     constructor() {
@@ -83,23 +84,7 @@ export class SceneUn extends Phaser.Scene {
 
     update() {
         if (this.gameOver) { return; }
-        if (this.cursors.left.isDown) { //si la touche gauche est appuyée
-            this.player.setVelocityX(-160); //alors vitesse négative en X
-            this.player.anims.play('left', true); //et animation => gauche
-        }
-        else if (this.cursors.right.isDown) { //sinon si la touche droite est appuyée
-            this.player.setVelocityX(160); //alors vitesse positive en X
-            this.player.anims.play('right', true); //et animation => droite
-        }
-        else { // sinon
-            this.player.setVelocityX(0); //vitesse nulle
-            this.player.anims.play('turn'); //animation fait face caméra
-        }
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
-            //si touche haut appuyée ET que le perso touche le sol
-            this.player.setVelocityY(-330); //alors vitesse verticale négative
-            //(on saute)
-        }
+        deplacement(this.player, this.cursors, this)
 
         if (this.score == 200) {
             this.scene.start('sceneDeux', {
@@ -138,4 +123,5 @@ export class SceneUn extends Phaser.Scene {
     }
 
 }
+
 

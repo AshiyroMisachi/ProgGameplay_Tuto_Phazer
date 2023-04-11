@@ -1,4 +1,6 @@
-class sceneDeux extends Phaser.Scene {
+import eventsCenter from "./EventsCenter.js"
+
+export class sceneDeux extends Phaser.Scene {
             constructor() {
                 super("sceneDeux");
             }
@@ -25,7 +27,6 @@ class sceneDeux extends Phaser.Scene {
                 this.scoreText;
                 this.bombs;
                 this.gameOver = false;
-
 
                 this.add.image(400, 300, 'sky');
                 this.platforms = this.physics.add.staticGroup();
@@ -55,7 +56,7 @@ class sceneDeux extends Phaser.Scene {
                     repeat: -1
                 });
                 this.cursors = this.input.keyboard.createCursorKeys();
-                this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+                //this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
                 //affiche un texte à l’écran, pour le score
                 this.stars = this.physics.add.group({
                     key: 'star', repeat: 11,
@@ -98,7 +99,8 @@ class sceneDeux extends Phaser.Scene {
             collectStar(player, star) {
                 star.disableBody(true, true); // l’étoile disparaît
                 this.score += 10; //augmente le score de 10
-                this.scoreText.setText('Score: ' + this.score); //met à jour l’affichage du score
+                eventsCenter.emit('update-count', this.score);
+                //this.scoreText.setText('Score: ' + this.score); //met à jour l’affichage du score
                 if (this.stars.countActive(true) === 0) {// si toutes les étoiles sont prises
                     this.stars.children.iterate(function (child) {
                         child.enableBody(true, child.x, 0, true, true);

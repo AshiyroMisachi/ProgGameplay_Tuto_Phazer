@@ -1,4 +1,6 @@
-class sceneUn extends Phaser.Scene {
+import eventsCenter from "./EventsCenter.js"
+
+export class SceneUn extends Phaser.Scene {
     constructor() {
         super("sceneUn");
     }
@@ -17,6 +19,8 @@ class sceneUn extends Phaser.Scene {
     }
 
     create() {
+        this.oui = true
+        this.scene.run('ui-scene');
         this.platforms;
         this.player;
         this.cursors;
@@ -25,7 +29,6 @@ class sceneUn extends Phaser.Scene {
         this.scoreText;
         this.bombs;
         this.gameOver = false;
-
 
         this.add.image(400, 300, 'skyred').setScale(2);
         this.platforms = this.physics.add.staticGroup();
@@ -55,7 +58,7 @@ class sceneUn extends Phaser.Scene {
             repeat: -1
         });
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        //this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
         //affiche un texte à l’écran, pour le score
         this.stars = this.physics.add.group({
             key: 'star', repeat: 11,
@@ -72,7 +75,10 @@ class sceneUn extends Phaser.Scene {
         this.bombs = this.physics.add.group();
         this.physics.add.collider(this.bombs, this.platforms);
         this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
-
+        //this.physics.world.setBounds(0, 0, 1600, 1600);
+        //this.cameras.main.setBounds(0, 0, 1600, 1600);
+        //this.cameras.main.startFollow(this.player); 
+        //this.cameras.main.setZoom(0.5);
     }
 
     update() {
@@ -100,12 +106,14 @@ class sceneUn extends Phaser.Scene {
                 patate: this.score
             })
         }
+
     }
 
     collectStar(player, star) {
         star.disableBody(true, true); // l’étoile disparaît
         this.score += 10; //augmente le score de 10
-        this.scoreText.setText('Score: ' + this.score); //met à jour l’affichage du score
+        eventsCenter.emit('update-count', this.score);
+        //this.scoreText.setText('Score: ' + this.score); //met à jour l’affichage du score
         if (this.stars.countActive(true) === 0) {// si toutes les étoiles sont prises
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, 0, true, true);
@@ -130,3 +138,4 @@ class sceneUn extends Phaser.Scene {
     }
 
 }
+
